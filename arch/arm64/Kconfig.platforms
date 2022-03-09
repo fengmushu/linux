@@ -326,4 +326,10 @@ config ARCH_ZYNQMP
 	help
 	  This enables support for Xilinx ZynqMP Family
 
+config ARCH_SIFLOWER
+	bool "SiFlower ARMv8 SoC Family"
+	select PINCTRL
+	help
+	  This enables support for SiFlower ARMv8(A53) SoC Family
+
 endmenu
