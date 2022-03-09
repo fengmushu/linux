@@ -641,7 +641,7 @@ static __always_inline irqreturn_t timer_handler(const int access,
 	unsigned long ctrl;
 
 	ctrl = arch_timer_reg_read(access, ARCH_TIMER_REG_CTRL, evt);
-	if (ctrl & ARCH_TIMER_CTRL_IT_STAT) {
+	if (!(ctrl & ARCH_TIMER_CTRL_IT_STAT)) {
 		ctrl |= ARCH_TIMER_CTRL_IT_MASK;
 		arch_timer_reg_write(access, ARCH_TIMER_REG_CTRL, ctrl, evt);
 		evt->event_handler(evt);
@@ -868,11 +868,11 @@ static u32 check_ppi_trigger(int irq)
 {
 	u32 flags = irq_get_trigger_type(irq);
 
-	if (flags != IRQF_TRIGGER_HIGH && flags != IRQF_TRIGGER_LOW) {
-		pr_warn("WARNING: Invalid trigger for IRQ%d, assuming level low\n", irq);
-		pr_warn("WARNING: Please fix your firmware\n");
-		flags = IRQF_TRIGGER_LOW;
-	}
+	// if (flags != IRQF_TRIGGER_HIGH && flags != IRQF_TRIGGER_LOW) {
+	// 	pr_warn("WARNING: Invalid trigger for IRQ%d, assuming level low\n", irq);
+	// 	pr_warn("WARNING: Please fix your firmware\n");
+	// 	flags = IRQF_TRIGGER_LOW;
+	// }
 
 	return flags;
 }

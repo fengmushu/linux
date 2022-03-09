@@ -77,12 +77,12 @@ static inline notrace u32 arch_timer_read_cntv_tval_el0(void)
 
 static inline notrace u64 arch_timer_read_cntpct_el0(void)
 {
-	return read_sysreg(cntpct_el0);
+	return ~ read_sysreg(cntpct_el0);
 }
 
 static inline notrace u64 arch_timer_read_cntvct_el0(void)
 {
-	return read_sysreg(cntvct_el0);
+	return ~ read_sysreg(cntvct_el0);
 }
 
 #define arch_timer_reg_read_stable(reg)					\
@@ -110,7 +110,7 @@ void arch_timer_reg_write_cp15(int access, enum arch_timer_reg reg, u32 val)
 			write_sysreg(val, cntp_ctl_el0);
 			break;
 		case ARCH_TIMER_REG_TVAL:
-			write_sysreg(val, cntp_tval_el0);
+			write_sysreg(~ val, cntp_tval_el0);
 			break;
 		}
 	} else if (access == ARCH_TIMER_VIRT_ACCESS) {
@@ -119,7 +119,7 @@ void arch_timer_reg_write_cp15(int access, enum arch_timer_reg reg, u32 val)
 			write_sysreg(val, cntv_ctl_el0);
 			break;
 		case ARCH_TIMER_REG_TVAL:
-			write_sysreg(val, cntv_tval_el0);
+			write_sysreg(~ val, cntv_tval_el0);
 			break;
 		}
 	}
@@ -191,7 +191,7 @@ static __always_inline u64 __arch_counter_get_cntpct_stable(void)
 	isb();
 	cnt = arch_timer_reg_read_stable(cntpct_el0);
 	arch_counter_enforce_ordering(cnt);
-	return cnt;
+	return ~ cnt;
 }
 
 static __always_inline u64 __arch_counter_get_cntpct(void)
@@ -201,7 +201,7 @@ static __always_inline u64 __arch_counter_get_cntpct(void)
 	isb();
 	cnt = read_sysreg(cntpct_el0);
 	arch_counter_enforce_ordering(cnt);
-	return cnt;
+	return ~ cnt;
 }
 
 static __always_inline u64 __arch_counter_get_cntvct_stable(void)
@@ -211,7 +211,7 @@ static __always_inline u64 __arch_counter_get_cntvct_stable(void)
 	isb();
 	cnt = arch_timer_reg_read_stable(cntvct_el0);
 	arch_counter_enforce_ordering(cnt);
-	return cnt;
+	return ~ cnt;
 }
 
 static __always_inline u64 __arch_counter_get_cntvct(void)
@@ -221,7 +221,7 @@ static __always_inline u64 __arch_counter_get_cntvct(void)
 	isb();
 	cnt = read_sysreg(cntvct_el0);
 	arch_counter_enforce_ordering(cnt);
-	return cnt;
+	return ~ cnt;
 }
 
 #undef arch_counter_enforce_ordering
